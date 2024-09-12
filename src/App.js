@@ -19,13 +19,14 @@ function App() {
     <div className="App">
       <div className="black-nav">ReactBLog</div>
       
+      {/* 글제목 정렬 버튼 */}
       <button onClick={() => {
           let copy = [...글제목];
           copy.sort();
           글제목변경(copy)
       }}>가나다순 정렬</button>
       
-      {/* 게시글 */}
+      {/* 게시글 목록 렌더링 */}
       {
         글제목.map(function(a, i){
           return (
@@ -43,8 +44,11 @@ function App() {
             {/* 글삭제 */}
             <button onClick={()=>{
               let copy = [...글제목];
+              let copy1 = [...따봉];
               copy.splice(i, 1);
+              copy1.splice(i, 1);
               글제목변경(copy);
+              따봉변경(copy1);
             }}>삭제</button>
           </div>)
         })
@@ -53,14 +57,23 @@ function App() {
       {/* input */}
       <input onChange={(e)=>{ 
         입력값변경(e.target.value); 
-        }}/>
+        }} placeholder="글제목을 입력하시오"/>
 
         <button onClick={()=>{
+          // 유효성 검사 추가 (공백 제거 후 체크)
+          if (입력값.trim() === "") {
+            alert("글 제목을 입력하세요.");
+            return;
+          }
+          let copy1 = [...따봉]
+          copy1.unshift(0)
+          따봉변경(copy1)
           let copy = [...글제목]
           copy.unshift(입력값)   /*unshift: 배열 앞에 추가, push: 배열 끝에 추가 */
           글제목변경(copy)
         }}>글발행</button>
 
+        {/* 모달 */}
       {
         modal == true ? <Modal title={title} 글제목={글제목}/> : null    // <Modal 작명={state이름}/>  이렇게 state 자식 컴포넌트에 state 전달
       }
