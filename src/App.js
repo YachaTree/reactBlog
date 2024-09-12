@@ -12,6 +12,8 @@ function App() {
   let [따봉, 따봉변경] = useState([0,0,0]);
   let [modal, setModal] = useState(false);
   let [title, setTitle] = useState(0);
+  let [입력값, 입력값변경] = useState('');
+  
 
   return (
     <div className="App">
@@ -23,22 +25,41 @@ function App() {
           글제목변경(copy)
       }}>가나다순 정렬</button>
       
+      {/* 게시글 */}
       {
         글제목.map(function(a, i){
           return (
           <div className="list">
             <h4 onClick={()=>{setModal(!modal); setTitle(i)}}>
-              { 글제목[i] }             
-            </h4>
-            <span onClick={()=>{ 
+              { 글제목[i] }
+              <span onClick={(e)=>{
+                e.stopPropagation(); 
                 let copy = [...따봉];
                 copy[i] = copy[i] + 1;
                 따봉변경(copy)  
-              }}>👍{따봉[i]}</span> 
+              }}>👍{따봉[i]}</span>             
+            </h4>
             <p>2월 7일 발행</p>
+            {/* 글삭제 */}
+            <button onClick={()=>{
+              let copy = [...글제목];
+              copy.splice(i, 1);
+              글제목변경(copy);
+            }}>삭제</button>
           </div>)
         })
       }
+
+      {/* input */}
+      <input onChange={(e)=>{ 
+        입력값변경(e.target.value); 
+        }}/>
+
+        <button onClick={()=>{
+          let copy = [...글제목]
+          copy.unshift(입력값)   /*unshift: 배열 앞에 추가, push: 배열 끝에 추가 */
+          글제목변경(copy)
+        }}>글발행</button>
 
       {
         modal == true ? <Modal title={title} 글제목={글제목}/> : null    // <Modal 작명={state이름}/>  이렇게 state 자식 컴포넌트에 state 전달
